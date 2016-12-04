@@ -4,12 +4,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,7 +21,25 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Score");
+        query.whereEqualTo("username", "ian");
+        query.setLimit(1);
 
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+
+                if (e == null){
+                    Log.i("objects retrieved:", "" + objects.size());
+                    if(objects.size()>0){
+                        for( ParseObject object :objects){
+                            Log.i("FindInBackgroundResult", "" + object.getInt("score"));
+                        }
+                    }
+                }
+
+            }
+        });
 
 
 /*        ParseObject score = new ParseObject("Tweet");
@@ -36,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });*/
 
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Tweet");
+ /*       ParseQuery<ParseObject> query = ParseQuery.getQuery("Tweet");
 
         query.getInBackground("AXMqgDePZV", new GetCallback<ParseObject>() {
             @Override
@@ -50,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
                 }
             }
-        });
+        });*/
 
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
 
