@@ -4,9 +4,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.parse.GetCallback;
 import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
 public class MainActivity extends AppCompatActivity {
@@ -16,9 +18,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ParseAnalytics.trackAppOpenedInBackground(getIntent());
 
-        ParseObject score = new ParseObject("Score");
+
+
+    /*    ParseObject score = new ParseObject("Score");
         score.put("username", "rob");
         score.put("score", 86);
         score.saveInBackground(new SaveCallback() {
@@ -31,7 +34,23 @@ public class MainActivity extends AppCompatActivity {
 
                 }
             }
+        });*/
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Score");
+
+        query.getInBackground("kwQGL1vc7b", new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject object, ParseException e) {
+                if (e == null && object !=null) {
+                    Log.i("Object Value", object.getString("username"));
+                    Log.i("Object Value", Integer.toString(object.getInt("score")));
+
+                }
+            }
         });
+
+        ParseAnalytics.trackAppOpenedInBackground(getIntent());
+
 
     }
 }
