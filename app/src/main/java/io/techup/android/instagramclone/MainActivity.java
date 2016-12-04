@@ -21,9 +21,9 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    /*    ParseObject score = new ParseObject("Score");
-        score.put("username", "rob");
-        score.put("score", 86);
+/*        ParseObject score = new ParseObject("Tweet");
+        score.put("username", "ian");
+        score.put("tweet", "Hello there. I'm a tweet");
         score.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
@@ -36,17 +36,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });*/
 
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Score");
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Tweet");
 
-        query.getInBackground("kwQGL1vc7b", new GetCallback<ParseObject>() {
+        query.getInBackground("AXMqgDePZV", new GetCallback<ParseObject>() {
             @Override
             public void done(ParseObject object, ParseException e) {
                 if (e == null && object !=null) {
-                    object.put("score", 100);
+                    object.put("tweet", "updating my tweet");
                     object.saveInBackground();
 
                     Log.i("Object Value", object.getString("username"));
-                    Log.i("Object Value", Integer.toString(object.getInt("score")));
+                    Log.i("Object Value", object.getString("tweet"));
 
                 }
             }
