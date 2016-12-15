@@ -22,6 +22,32 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Score");
+        query.whereGreaterThan("score", 200);
+
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+
+                if (e == null){
+                    Log.i("objects retrieved:", "" + objects.size());
+                    if(objects.size()>0){
+                        for( ParseObject object :objects){
+                            int score = 0;
+                            score = object.getInt("score");
+                            score += 50;
+                            object.put("score", score);
+                            Log.i("score", "" + score);
+                            object.saveInBackground();
+
+
+                        }
+                    }
+                }
+
+            }
+        });
+
+/*        ParseQuery<ParseObject> query = ParseQuery.getQuery("Score");
         query.whereEqualTo("username", "ian");
         query.setLimit(1);
 
@@ -39,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
             }
-        });
+        });*/
 
 
 /*        ParseObject score = new ParseObject("Tweet");
