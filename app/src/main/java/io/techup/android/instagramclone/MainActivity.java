@@ -10,7 +10,9 @@ import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 import com.parse.SaveCallback;
+import com.parse.SignUpCallback;
 
 import java.util.List;
 
@@ -21,7 +23,27 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Score");
+        ParseUser user = new ParseUser();
+
+        user.setUsername("ian");
+        user.setPassword("password");
+
+        user.signUpInBackground(new SignUpCallback() {
+            @Override
+            public void done(ParseException e) {
+                if(e == null){
+                    Log.i("Sign up", "Success");
+                }else{
+                    Log.i("Sign up", "Failed");
+                }
+            }
+        });
+
+
+
+        
+
+        /*ParseQuery<ParseObject> query = ParseQuery.getQuery("Score");
         query.whereGreaterThan("score", 200);
 
         query.findInBackground(new FindCallback<ParseObject>() {
@@ -47,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-/*        ParseQuery<ParseObject> query = ParseQuery.getQuery("Score");
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Score");
         query.whereEqualTo("username", "ian");
         query.setLimit(1);
 
@@ -65,10 +87,10 @@ public class MainActivity extends AppCompatActivity {
                 }
 
             }
-        });*/
+        });
 
 
-/*        ParseObject score = new ParseObject("Tweet");
+        ParseObject score = new ParseObject("Tweet");
         score.put("username", "ian");
         score.put("tweet", "Hello there. I'm a tweet");
         score.saveInBackground(new SaveCallback() {
@@ -81,9 +103,9 @@ public class MainActivity extends AppCompatActivity {
 
                 }
             }
-        });*/
+        });
 
- /*       ParseQuery<ParseObject> query = ParseQuery.getQuery("Tweet");
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Tweet");
 
         query.getInBackground("AXMqgDePZV", new GetCallback<ParseObject>() {
             @Override
