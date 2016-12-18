@@ -1,8 +1,12 @@
 package io.techup.android.instagramclone;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.parse.FindCallback;
 import com.parse.GetCallback;
@@ -17,12 +21,18 @@ import com.parse.SignUpCallback;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Button btnLogin = (Button) findViewById(R.id.btn_login);
+        TextView tvRegister = (TextView) findViewById(R.id.tv_signUp);
+        btnLogin.setOnClickListener(this);
+        tvRegister.setOnClickListener(this);
 
         ParseUser.logOut();
         
@@ -146,6 +156,25 @@ public class MainActivity extends AppCompatActivity {
 
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
 
+
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        Intent intent = null;
+
+        switch(v.getId()){
+            case R.id.btn_login: /** Start a new Activity MyCards.java */
+                intent = new Intent(MainActivity.this, RegisterActivity.class);
+                break;
+
+            case R.id.tv_signUp:
+                intent = new Intent(MainActivity.this, RegisterActivity.class);
+                break;
+        }
+
+        startActivity(intent);
 
     }
 }
