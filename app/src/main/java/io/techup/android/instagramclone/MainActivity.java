@@ -24,8 +24,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        ParseUser.logOut();
         
+
+/*        if(ParseUser.getCurrentUser() != null){
+            Log.i("currentUser", ParseUser.getCurrentUser().getUsername());
+        }else{
+            Log.i("currentUser", "User not logged in");
+        }*/
+
+
+
   /*      ParseUser.logInInBackground("ian", "password", new LogInCallback() {
             @Override
             public void done(ParseUser user, ParseException e) {
