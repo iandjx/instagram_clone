@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.parse.FindCallback;
@@ -23,6 +24,8 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    String userName;
+    String password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,10 +34,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Button btnLogin = (Button) findViewById(R.id.btn_login);
         TextView tvRegister = (TextView) findViewById(R.id.tv_signUp);
+        EditText tvUserName = (EditText) findViewById(R.id.et_userName);
+        EditText tvPassword = (EditText) findViewById(R.id.et_password);
         btnLogin.setOnClickListener(this);
         tvRegister.setOnClickListener(this);
 
+
+        userName = tvUserName.getText().toString();
+        password = tvPassword.getText().toString();
+
+
         ParseUser.logOut();
+
         
 
 /*        if(ParseUser.getCurrentUser() != null){
@@ -45,17 +56,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
-  /*      ParseUser.logInInBackground("ian", "password", new LogInCallback() {
-            @Override
-            public void done(ParseUser user, ParseException e) {
-                if (user != null){
-                    Log.i("Login", "Successful");
-                }else
-                    Log.i("Login", "Failed");
-            }
-        });
 
-*/
 /*        ParseUser user = new ParseUser();
 
         user.setUsername("ian");
@@ -164,9 +165,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         Intent intent = null;
 
-        switch(v.getId()){
-            case R.id.btn_login: /** Start a new Activity MyCards.java */
-                intent = new Intent(MainActivity.this, RegisterActivity.class);
+        switch (v.getId()) {
+            case R.id.btn_login:
+
+                ParseUser.logInInBackground(userName, password, new LogInCallback() {
+                    @Override
+                    public void done(ParseUser user, ParseException e) {
+                        if (user != null) {
+                            Log.i("Login", "Successful");
+                        } else
+                            Log.i("Login", "Failed");
+                    }
+                });
+
                 break;
 
             case R.id.tv_signUp:
@@ -174,7 +185,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
 
-        startActivity(intent);
 
     }
 }
