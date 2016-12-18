@@ -26,6 +26,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     String userName;
     String password;
+    EditText etUserName;
+    EditText etPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,14 +36,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Button btnLogin = (Button) findViewById(R.id.btn_login);
         TextView tvRegister = (TextView) findViewById(R.id.tv_signUp);
-        EditText tvUserName = (EditText) findViewById(R.id.et_userName);
-        EditText tvPassword = (EditText) findViewById(R.id.et_password);
+        etUserName = (EditText) findViewById(R.id.et_userName);
+        etPassword = (EditText) findViewById(R.id.et_password);
         btnLogin.setOnClickListener(this);
         tvRegister.setOnClickListener(this);
 
 
-        userName = tvUserName.getText().toString();
-        password = tvPassword.getText().toString();
+
 
 
         ParseUser.logOut();
@@ -57,21 +58,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
-/*        ParseUser user = new ParseUser();
-
-        user.setUsername("ian");
-        user.setPassword("password");
-
-        user.signUpInBackground(new SignUpCallback() {
-            @Override
-            public void done(ParseException e) {
-                if(e == null){
-                    Log.i("Sign up", "Success");
-                }else{
-                    Log.i("Sign up", "Failed");
-                }
-            }
-        });*/
 
 
 
@@ -167,6 +153,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         switch (v.getId()) {
             case R.id.btn_login:
+                userName = etUserName.getText().toString();
+                password = etPassword.getText().toString();
 
                 ParseUser.logInInBackground(userName, password, new LogInCallback() {
                     @Override
@@ -182,9 +170,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.tv_signUp:
                 intent = new Intent(MainActivity.this, RegisterActivity.class);
+                startActivity(intent);
                 break;
         }
-
+        Log.i("Login Details", userName + "" + password);
 
     }
 }
