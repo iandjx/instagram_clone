@@ -1,8 +1,13 @@
 package io.techup.android.instagramclone;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.parse.FindCallback;
 import com.parse.GetCallback;
@@ -17,14 +22,31 @@ import com.parse.SignUpCallback;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
+    String userName;
+    String password;
+    EditText etUserName;
+    EditText etPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Button btnLogin = (Button) findViewById(R.id.btn_login);
+        TextView tvRegister = (TextView) findViewById(R.id.tv_signUp);
+        etUserName = (EditText) findViewById(R.id.et_userName);
+        etPassword = (EditText) findViewById(R.id.et_password);
+        btnLogin.setOnClickListener(this);
+        tvRegister.setOnClickListener(this);
+
+
+
+
+
         ParseUser.logOut();
+
         
 
 /*        if(ParseUser.getCurrentUser() != null){
@@ -35,32 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-  /*      ParseUser.logInInBackground("ian", "password", new LogInCallback() {
-            @Override
-            public void done(ParseUser user, ParseException e) {
-                if (user != null){
-                    Log.i("Login", "Successful");
-                }else
-                    Log.i("Login", "Failed");
-            }
-        });
 
-*/
-/*        ParseUser user = new ParseUser();
-
-        user.setUsername("ian");
-        user.setPassword("password");
-
-        user.signUpInBackground(new SignUpCallback() {
-            @Override
-            public void done(ParseException e) {
-                if(e == null){
-                    Log.i("Sign up", "Success");
-                }else{
-                    Log.i("Sign up", "Failed");
-                }
-            }
-        });*/
 
 
 
@@ -146,6 +143,37 @@ public class MainActivity extends AppCompatActivity {
 
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
 
+
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        Intent intent = null;
+
+        switch (v.getId()) {
+            case R.id.btn_login:
+                userName = etUserName.getText().toString();
+                password = etPassword.getText().toString();
+
+                ParseUser.logInInBackground(userName, password, new LogInCallback() {
+                    @Override
+                    public void done(ParseUser user, ParseException e) {
+                        if (user != null) {
+                            Log.i("Login", "Successful");
+                        } else
+                            Log.i("Login", "Failed");
+                    }
+                });
+
+                break;
+
+            case R.id.tv_signUp:
+                intent = new Intent(MainActivity.this, RegisterActivity.class);
+                startActivity(intent);
+                break;
+        }
+        Log.i("Login Details", userName + "" + password);
 
     }
 }
