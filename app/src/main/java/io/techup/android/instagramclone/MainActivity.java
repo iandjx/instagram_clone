@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,24 +23,26 @@ import com.parse.SignUpCallback;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, View.OnKeyListener {
 
     String userName;
     String password;
     EditText etUserName;
     EditText etPassword;
+    Button btnLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button btnLogin = (Button) findViewById(R.id.btn_login);
+        btnLogin = (Button) findViewById(R.id.btn_login);
         TextView tvRegister = (TextView) findViewById(R.id.tv_signUp);
         etUserName = (EditText) findViewById(R.id.et_userName);
         etPassword = (EditText) findViewById(R.id.et_password);
         btnLogin.setOnClickListener(this);
         tvRegister.setOnClickListener(this);
+        etPassword.setOnKeyListener(this);
 
 
 
@@ -175,5 +178,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         Log.i("Login Details", userName + "" + password);
 
+    }
+
+    @Override
+    public boolean onKey(View v, int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_ENTER){
+            btnLogin.performClick();
+        }
+        return false;
     }
 }
