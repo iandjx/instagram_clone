@@ -4,9 +4,13 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.parse.FindCallback;
@@ -22,24 +26,31 @@ import com.parse.SignUpCallback;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, View.OnKeyListener {
 
     String userName;
     String password;
     EditText etUserName;
     EditText etPassword;
+    Button btnLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button btnLogin = (Button) findViewById(R.id.btn_login);
         TextView tvRegister = (TextView) findViewById(R.id.tv_signUp);
+        LinearLayout layout = (LinearLayout) findViewById(R.id.layoutMain);
+        ImageView ivLogo = (ImageView) findViewById(R.id.ivLogo);
+        btnLogin = (Button) findViewById(R.id.btn_login);
         etUserName = (EditText) findViewById(R.id.et_userName);
         etPassword = (EditText) findViewById(R.id.et_password);
+
         btnLogin.setOnClickListener(this);
         tvRegister.setOnClickListener(this);
+        etPassword.setOnKeyListener(this);
+        layout.setOnClickListener(this);
+        ivLogo.setOnClickListener(this);
 
 
 
@@ -172,8 +183,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 intent = new Intent(MainActivity.this, RegisterActivity.class);
                 startActivity(intent);
                 break;
+
+            case R.id.layoutMain:case R.id.ivLogo:
+                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+
         }
+
+
         Log.i("Login Details", userName + "" + password);
 
+    }
+
+    @Override
+    public boolean onKey(View v, int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN){
+            btnLogin.performClick();
+        }
+        return false;
     }
 }
