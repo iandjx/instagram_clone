@@ -1,5 +1,12 @@
 package io.techup.android.instagramclone;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -23,6 +30,21 @@ public class UserListActivity extends AppCompatActivity {
     ParseQuery<ParseUser> query;
     ArrayAdapter arrayAdapter;
 
+    public void getPhoto() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, 1);
+    }
+
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getPhoto();
+
+            }
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
@@ -35,9 +57,19 @@ public class UserListActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-       if(item.getItemId() == R.id.menu_share){
-           //do something
-       }
+        if (item.getItemId() == R.id.menu_share) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+                } else {
+                    getPhoto();
+
+                }
+            } else {
+                getPhoto();
+
+            }
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -57,22 +89,20 @@ public class UserListActivity extends AppCompatActivity {
         query.findInBackground(new FindCallback<ParseUser>() {
             @Override
             public void done(List<ParseUser> objects, ParseException e) {
-                if(e== null){
-                    if(objects.size()>0){
-                        for(ParseUser user: objects){
+                if (e == null) {
+                    if (objects.size() > 0) {
+                        for (ParseUser user : objects) {
                             usernames.add(user.getUsername());
                         }
                         userListView.setAdapter(arrayAdapter);
 
                     }
 
-                }else{
+                } else {
                     e.printStackTrace();
                 }
             }
         });
-
-
 
 
     }
