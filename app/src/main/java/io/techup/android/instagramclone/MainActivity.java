@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.LogInCallback;
+import com.parse.Parse;
 import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -52,11 +53,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         layout.setOnClickListener(this);
         ivLogo.setOnClickListener(this);
 
+        if (ParseUser.getCurrentUser() != null){
+            showUserList();
+        }
 
 
 
 
-        ParseUser.logOut();
+//        ParseUser.logOut();
 
         
 
@@ -156,6 +160,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     }
+    public void showUserList(){
+        Intent intent = new Intent(this, UserListActivity.class);
+        startActivity(intent);
+
+    }
 
 
     @Override
@@ -172,6 +181,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     public void done(ParseUser user, ParseException e) {
                         if (user != null) {
                             Log.i("Login", "Successful");
+                            showUserList();
                         } else
                             Log.i("Login", "Failed");
                     }

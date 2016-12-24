@@ -1,5 +1,6 @@
 package io.techup.android.instagramclone;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -37,6 +38,12 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
+    public void showUserList(){
+        Intent intent = new Intent(this, UserListActivity.class);
+        startActivity(intent);
+
+    }
+
     @Override
     public void onClick(View v) {
         username = etUsername.getText().toString();
@@ -52,6 +59,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             public void done(ParseException e) {
                 if (e == null) {
                     Log.i("Sign up", "Success");
+                    showUserList();
                 } else {
                     Log.i("Sign up", "Failed");
                 }
