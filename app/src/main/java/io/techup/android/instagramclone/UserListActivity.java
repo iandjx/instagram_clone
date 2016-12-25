@@ -15,6 +15,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -32,7 +34,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserListActivity extends AppCompatActivity {
+public class UserListActivity extends AppCompatActivity implements ListView.OnItemClickListener{
 
     ArrayList<String> usernames;
     ListView userListView;
@@ -128,6 +130,7 @@ public class UserListActivity extends AppCompatActivity {
 
         usernames = new ArrayList<>();
         userListView = (ListView) findViewById(R.id.lv_userList);
+        userListView.setOnItemClickListener(this);
         arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, usernames);
 
         query = ParseUser.getQuery();
@@ -151,6 +154,14 @@ public class UserListActivity extends AppCompatActivity {
             }
         });
 
+
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Intent intent = new Intent(getApplicationContext(), UserFeedActivity.class);
+        intent.putExtra("username", usernames.get(position));
+        startActivity(intent);
 
     }
 }
