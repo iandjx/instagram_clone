@@ -15,6 +15,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -32,7 +34,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserListActivity extends AppCompatActivity {
+public class UserListActivity extends AppCompatActivity implements ListView.OnItemClickListener {
 
     ArrayList<String> usernames;
     ListView userListView;
@@ -66,18 +68,32 @@ public class UserListActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_share) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
-                } else {
-                    getPhoto();
+        switch (item.getItemId()) {
+            case R.id.menu_logout:
+                ParseUser.logOut();
+                Log.i("Parse user", "" + ParseUser.getCurrentUser());
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
 
+                break;
+
+            case R.id.menu_share:
+                if (item.getItemId() == R.id.menu_share) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+                        } else {
+                            getPhoto();
+
+                        }
+                    } else {
+                        getPhoto();
+
+                    }
                 }
-            } else {
-                getPhoto();
+                break;
 
-            }
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -105,9 +121,9 @@ public class UserListActivity extends AppCompatActivity {
                 object.saveInBackground(new SaveCallback() {
                     @Override
                     public void done(ParseException e) {
-                        if(e == null){
+                        if (e == null) {
                             Log.i("SaveInBackground", "Success");
-                        }else{
+                        } else {
                             Log.i("SaveInBackground", "Failed Error:" + String.valueOf(e));
 
                         }
@@ -128,6 +144,7 @@ public class UserListActivity extends AppCompatActivity {
 
         usernames = new ArrayList<>();
         userListView = (ListView) findViewById(R.id.lv_userList);
+        userListView.setOnItemClickListener(this);
         arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, usernames);
 
         query = ParseUser.getQuery();
@@ -151,6 +168,14 @@ public class UserListActivity extends AppCompatActivity {
             }
         });
 
+
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Intent intent = new Intent(getApplicationContext(), UserFeedActivity.class);
+        intent.putExtra("username", usernames.get(position));
+        startActivity(intent);
 
     }
 }

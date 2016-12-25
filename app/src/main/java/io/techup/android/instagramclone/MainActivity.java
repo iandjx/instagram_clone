@@ -53,6 +53,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         layout.setOnClickListener(this);
         ivLogo.setOnClickListener(this);
 
+//        ParseUser.logOut();
+
         if (ParseUser.getCurrentUser() != null){
             showUserList();
         }
@@ -60,7 +62,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
-//        ParseUser.logOut();
 
         
 
