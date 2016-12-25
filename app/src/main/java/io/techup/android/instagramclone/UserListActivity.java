@@ -34,7 +34,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserListActivity extends AppCompatActivity implements ListView.OnItemClickListener{
+public class UserListActivity extends AppCompatActivity implements ListView.OnItemClickListener {
 
     ArrayList<String> usernames;
     ListView userListView;
@@ -68,18 +68,32 @@ public class UserListActivity extends AppCompatActivity implements ListView.OnIt
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_share) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
-                } else {
-                    getPhoto();
+        switch (item.getItemId()) {
+            case R.id.menu_logout:
+                ParseUser.logOut();
+                Log.i("Parse user", "" + ParseUser.getCurrentUser());
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
 
+                break;
+
+            case R.id.menu_share:
+                if (item.getItemId() == R.id.menu_share) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+                        } else {
+                            getPhoto();
+
+                        }
+                    } else {
+                        getPhoto();
+
+                    }
                 }
-            } else {
-                getPhoto();
+                break;
 
-            }
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -107,9 +121,9 @@ public class UserListActivity extends AppCompatActivity implements ListView.OnIt
                 object.saveInBackground(new SaveCallback() {
                     @Override
                     public void done(ParseException e) {
-                        if(e == null){
+                        if (e == null) {
                             Log.i("SaveInBackground", "Success");
-                        }else{
+                        } else {
                             Log.i("SaveInBackground", "Failed Error:" + String.valueOf(e));
 
                         }
